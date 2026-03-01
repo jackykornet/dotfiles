@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# install software packages
+
+sudo apt install shellcheck
+
+# install starship
+curl -sS https://starship.rs/install.sh | sh
+
 # Description: Link dotfiles to home directory
 
 mkdir -p ~/.config
