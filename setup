@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# install software packages
-
-sudo apt install shellcheck
+# install packages
+. install_packages "$manager" shellcheck vim htop
 
 # install starship
 curl -sS https://starship.rs/install.sh | sh
