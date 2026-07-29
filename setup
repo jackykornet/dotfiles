@@ -1,3 +1,7 @@
+sudo apt install shellcheck
+
+# install starship
+curl -sS https://starship.rs/install.sh | sh
 #!/bin/bash
 
 # Description: Link dotfiles to home directory

@@ -1,6 +1,14 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# kubectl
+alias k='kubectl'
+
+source /etc/bash_completion
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
+export KUBECONFIG="${HOME}/.kube/config:${HOME}/.kube/config-bella02"
+
+
+# Flux
+command -v flux >/dev/null && . <(flux completion bash)
 
 # If not running interactively, don't do anything
 case $- in
