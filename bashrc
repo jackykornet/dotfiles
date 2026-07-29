@@ -3,12 +3,16 @@ alias k='kubectl'
 
 source /etc/bash_completion
 source <(kubectl completion bash)
+<<<<<<< HEAD
 complete -o default -F __start_kubectl k
 export KUBECONFIG="${HOME}/.kube/config:${HOME}/.kube/config-bella02"
 
 
 # Flux
 command -v flux >/dev/null && . <(flux completion bash)
+=======
+complete -o default -F __start kubectl k
+>>>>>>> af19956d6d515d9b15818264d1f863b79ad13309
 
 # If not running interactively, don't do anything
 case $- in

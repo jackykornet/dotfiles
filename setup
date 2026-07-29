@@ -4,6 +4,12 @@ sudo apt install shellcheck
 curl -sS https://starship.rs/install.sh | sh
 #!/bin/bash
 
+# install packages
+. install_packages "$manager" shellcheck vim htop
+
+# install starship
+curl -sS https://starship.rs/install.sh | sh
+
 # Description: Link dotfiles to home directory
 
 mkdir -p ~/.config
