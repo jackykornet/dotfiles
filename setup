@@ -16,5 +16,10 @@ ln -sf ~/dotfiles/starship.toml ~/.config/starship.toml
 
 echo "Dotfiles linked!"
 
+# setup repo's
+git clone git@github.com:jackykornet/lab.git ../lab 
+
+echo "Repositories cloned!"
+
 # reload bash
-~ ./bashrc
+. ~/.bashrc
