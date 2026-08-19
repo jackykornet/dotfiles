@@ -1,8 +1,44 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# some ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
-# If not running interactively, don't do anything
+# activate mise if installed
+if command -v mise >/dev/null; then
+  eval "$(mise activate bash)"
+fi
+
+# set kubectl specific settings if installed
+if command -v kubectl >/dev/null; then
+  # create alias for kubectl
+  alias k='kubectl'
+  # add bash completion for kubctl
+  source <(kubectl completion bash)
+  complete -o default -F __start_kubectl k
+fi
+
+# set git specific settings if installed
+if command -v git >/dev/null; then
+  alias gp='git push'
+  alias gpl='git pull'
+  alias ga='git add'
+  alias gaa='git add .'
+  alias gc='git commit -v'
+  alias gd='git diff'
+  alias gst='git status'
+fi
+
+# set Flux specific settings if installed
+if command -v flux >/dev/null; then
+  command -v flux >/dev/null && . <(flux completion bash)
+fi
+
+# set starship specific settings if installed
+if command -v starship >/dev/null; then
+  eval "$(starship init bash)"
+fi
+
+## If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
@@ -83,80 +119,3 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-# bash theme - partly inspired by https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/robbyrussell.zsh-theme
-__bash_prompt() {
-    local userpart='`export XIT=$? \
-        && [ ! -z "${GITHUB_USER:-}" ] && echo -n "\[\033[0;32m\]@${GITHUB_USER:-} " || echo -n "\[\033[0;32m\]\u " \
-        && [ "$XIT" -ne "0" ] && echo -n "\[\033[1;31m\]➜" || echo -n "\[\033[0m\]➜"`'
-    local gitbranch='`\
-        if [ "$(git config --get devcontainers-theme.hide-status 2>/dev/null)" != 1 ] && [ "$(git config --get codespaces-theme.hide-status 2>/dev/null)" != 1 ]; then \
-            export BRANCH="$(git --no-optional-locks symbolic-ref --short HEAD 2>/dev/null || git --no-optional-locks rev-parse --short HEAD 2>/dev/null)"; \
-            if [ "${BRANCH:-}" != "" ]; then \
-                echo -n "\[\033[0;36m\](\[\033[1;31m\]${BRANCH:-}" \
-                && if [ "$(git config --get devcontainers-theme.show-dirty 2>/dev/null)" = 1 ] && \
-                    git --no-optional-locks ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1; then \
-                        echo -n " \[\033[1;33m\]✗"; \
-                fi \
-                && echo -n "\[\033[0;36m\]) "; \
-            fi; \
-        fi`'
-    local lightblue='\[\033[1;34m\]'
-    local removecolor='\[\033[0m\]'
-    PS1="${userpart} ${lightblue}\w ${gitbranch}${removecolor}\$ "
-    unset -f __bash_prompt
-}
-__bash_prompt
-export PROMPT_DIRTRIM=4
-
-# Check if the terminal is xterm
-if [[ "$TERM" == "xterm" ]]; then
-    # Function to set the terminal title to the current command
-    preexec() {
-        local cmd="${BASH_COMMAND}"
-        echo -ne "\033]0;${USER}@${HOSTNAME}: ${cmd}\007"
-    }
-
-    # Function to reset the terminal title to the shell type after the command is executed
-    precmd() {
-        echo -ne "\033]0;${USER}@${HOSTNAME}: ${SHELL}\007"
-    }
-
-    # Trap DEBUG signal to call preexec before each command
-    trap 'preexec' DEBUG
-
-    # Append to PROMPT_COMMAND to call precmd before displaying the prompt
-    PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }precmd"
-fi
-eval "$(mise activate bash)"
