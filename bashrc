@@ -15,7 +15,6 @@ alias gst='git status'
 
 # Flux
 command -v flux >/dev/null && . <(flux completion bash)
-complete -o default -F __start kubectl k
 
 # If not running interactively, don't do anything
 case $- in

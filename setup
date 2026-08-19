@@ -1,21 +1,9 @@
-sudo apt install shellcheck
-
-# install starship
-curl -sS https://starship.rs/install.sh | sh
 #!/bin/bash
 
-# install packages
-. install_packages "$manager" shellcheck vim htop
+set -euo pipefail
 
-# install starship
-curl -sS https://starship.rs/install.sh | sh
+if ! command -v chezmoi >/dev/null; then
+    sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:/jackykornet/dotfiles.git
+fi
 
-# Description: Link dotfiles to home directory
-
-mkdir -p ~/.config
-
-ln -sf ~/dotfiles/bashrc ~/.bashrc
-ln -sf ~/dotfiles/vimrc ~/.vimrc
-ln -sf ~/dotfiles/starship.toml ~/.config/starship.toml
-
-echo "Dotfiles linked!"
+exit 0
