@@ -1,5 +1,5 @@
 [tools]
-vim      = "latest"
+vim      = "9.2"
 chezmoi  = "latest"
 starship = "latest"
 tmux     = "latest"
